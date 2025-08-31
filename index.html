@@ -5,25 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b1220" />
   <title>До переворота календаря осталось…</title>
+
+  <!-- Встроенные стили в <style> (корректное подключение CSS) -->
   <style>
     :root{
       --bg: radial-gradient(1200px 800px at 80% -10%, #2a74ff22, transparent 60%),
             radial-gradient(900px 700px at -10% 110%, #ff2ad622, transparent 60%),
             linear-gradient(180deg, #0b1220, #0b1220);
-      --card-bg: color-mix(in oklab, #111 86%, white 0%);
-      --card-border: #ffffff16;
-      --accent: #6aa2ff;
-      --accent-2: #ff7ad6;
+      --panel: #0f1726cc;
+      --border: #ffffff1a;
       --text: #eaf1ff;
       --muted: #a9b3c7;
-      --shadow: 0 10px 30px #0008, inset 0 -1px 0 #fff1;
+      --glow1: #6aa2ff;
+      --glow2: #ff7ad6;
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
     body{
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
       color: var(--text);
       background: var(--bg), #0b1220;
       display: grid;
@@ -33,21 +34,21 @@
 
     .card{
       width: min(920px, 100%);
-      background: color-mix(in oklab, var(--card-bg) 86%, transparent);
-      border: 1px solid var(--card-border);
+      background: color-mix(in oklab, var(--panel) 92%, transparent);
+      border: 1px solid var(--border);
       border-radius: 20px;
-      box-shadow: var(--shadow);
       padding: clamp(16px, 4vw, 28px);
       backdrop-filter: blur(10px) saturate(1.2);
       -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      box-shadow: 0 10px 30px #0008, inset 0 -1px 0 #fff1;
     }
 
     .title{
       margin: 0 0 clamp(14px, 3.2vw, 22px);
-      font-weight: 700;
-      letter-spacing: 0.2px;
+      font-weight: 800;
       line-height: 1.2;
-      font-size: clamp(18px, 4.5vw, 28px);
+      font-size: clamp(18px, 5vw, 32px);
+      letter-spacing: 0.2px;
       text-wrap: balance;
       background: linear-gradient(90deg, var(--text), #cfe1ff);
       -webkit-background-clip: text;
@@ -67,27 +68,27 @@
 
     .block{
       position: relative;
-      isolation: isolate;
       border-radius: 16px;
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--border);
       background:
         radial-gradient(120% 160% at 110% -20%, #6aa2ff16, transparent 60%),
         radial-gradient(120% 160% at -10% 120%, #ff7ad616, transparent 60%),
         linear-gradient(180deg, #111925, #0e1624);
-      box-shadow: 0 8px 20px #0007, inset 0 1px 0 #ffffff08;
+      box-shadow: 0 8px 20px #0007, inset 0 1px 0 #ffffff0a;
       padding: clamp(10px, 3vw, 16px) clamp(12px, 3.4vw, 18px);
       display: grid;
       align-content: center;
       justify-items: center;
       min-height: clamp(88px, 26vw, 140px);
       overflow: hidden;
+      isolation: isolate;
     }
 
     .number{
-      font-weight: 800;
+      font-weight: 900;
       font-variant-numeric: tabular-nums lining-nums;
-      letter-spacing: -0.5px;
       line-height: 1;
+      letter-spacing: -0.5px;
       font-size: clamp(34px, 14vw, 80px);
       background: linear-gradient(180deg, #ffffff, #cfe1ff 60%, #a9b3c7);
       -webkit-background-clip: text;
@@ -106,7 +107,7 @@
       user-select: none;
     }
 
-    /* Pop animation on change */
+    /* Анимация на смену цифры */
     @keyframes pop {
       0%   { transform: scale(0.92); filter: drop-shadow(0 0 0 #0000); }
       60%  { transform: scale(1.04); filter: drop-shadow(0 6px 16px #0008); }
@@ -114,59 +115,29 @@
     }
     .number.tick { animation: pop 380ms cubic-bezier(.2,.8,.2,1); }
 
-    /* Subtle shine sweep */
+    /* Декоративный блик */
     .block::after{
       content:"";
-      position: absolute;
-      inset: -40%;
+      position: absolute; inset: -40%;
       background: conic-gradient(from 210deg at 50% 50%, #fff0 0 75%, #ffffff0a 83%, #fff0 90%);
-      transform: rotate(0deg);
       animation: sweep 6s linear infinite;
-      pointer-events: none;
       z-index: -1;
     }
-    @keyframes sweep {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes sweep { to { transform: rotate(360deg); } }
 
-    /* Accessibility: respect reduced motion */
+    /* Доступность: уважать prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce){
       .number.tick { animation-duration: 1ms; animation-iteration-count: 1; }
       .block::after { animation-duration: 1ms; animation-iteration-count: 1; }
       * { scroll-behavior: auto !important; }
     }
 
-    .footer{
+    .status{
       margin-top: clamp(14px, 3.5vw, 20px);
       color: var(--muted);
       font-size: clamp(12px, 3.2vw, 14px);
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
       text-align: center;
     }
-
-    .badge{
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--card-border);
-      background: linear-gradient(180deg, #111a28, #0e1624);
-      box-shadow: inset 0 1px 0 #ffffff0a;
-      color: #cfe1ff;
-    }
-    .dot{
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #9cf, #6aa2ff);
-      box-shadow: 0 0 10px #6aa2ff;
-    }
-    .done{ color: #a6f4c5; }
   </style>
 </head>
 <body>
@@ -192,14 +163,15 @@
       </div>
     </section>
 
-    <div class="footer" id="status">
-      <span class="badge"><span class="dot"></span> Цель: 00:00 • 03.09.2025 (локальное время)</span>
-    </div>
+    <div class="status" id="status">Цель: 00:00 • 03.09.2025 (локальное время)</div>
   </main>
+
+  <noscript>Для работы таймера нужен JavaScript.</noscript>
 
   <script>
     // Целевая дата: 00:00 03.09.2025 по локальному времени устройства
-    const target = new Date(2025, 8, 3, 0, 0, 0, 0); // Месяцы 0-индексированы (8 = Сентябрь)
+    // Месяцы 0-индексированы: 8 = сентябрь
+    const target = new Date(2025, 8, 3, 0, 0, 0, 0);
 
     const el = {
       d: document.getElementById('d'),
@@ -210,14 +182,14 @@
       title: document.querySelector('.title'),
     };
 
-    function pad(n){ return n.toString().padStart(2, '0'); }
+    const SEC = 1000, MIN = 60 * SEC, HOUR = 60 * MIN, DAY = 24 * HOUR;
 
-    function setNum(node, value){
+    const pad2 = (n) => String(n).padStart(2, '0');
+
+    function bump(node, value){
       if (node.textContent === value) return;
-      // Перезапускаем "pop" анимацию
       node.classList.remove('tick');
-      // принудительная реflow для перезапуска анимации
-      void node.offsetWidth;
+      void node.offsetWidth; // перезапустить анимацию
       node.textContent = value;
       node.classList.add('tick');
     }
@@ -227,179 +199,26 @@
       let diff = target - now;
 
       if (diff <= 0){
-        setNum(el.d, '00');
-        setNum(el.h, '00');
-        setNum(el.m, '00');
-        setNum(el.s, '00');
+        ['d','h','m','s'].forEach(k => bump(el[k], '00'));
         el.title.textContent = 'Календарь перевернулся!';
-        el.status.innerHTML = '<span class="badge done">Событие наступило</span>';
+        el.status.textContent = 'Событие наступило';
         clearInterval(timer);
         return;
       }
 
-      const SEC = 1000;
-      const MIN = SEC * 60;
-      const HOUR = MIN * 60;
-      const DAY = HOUR * 24;
-
-      const days = Math.floor(diff / DAY);
-      diff %= DAY;
-      const hours = Math.floor(diff / HOUR);
-      diff %= HOUR;
-      const minutes = Math.floor(diff / MIN);
-      diff %= MIN;
+      const days = Math.floor(diff / DAY); diff %= DAY;
+      const hours = Math.floor(diff / HOUR); diff %= HOUR;
+      const minutes = Math.floor(diff / MIN); diff %= MIN;
       const seconds = Math.floor(diff / SEC);
 
-      setNum(el.d, String(days).padStart(2, '0'));
-      setNum(el.h, pad(hours));
-      setNum(el.m, pad(minutes));
-      setNum(el.s, pad(seconds));
+      bump(el.d, String(days).padStart(2, '0'));
+      bump(el.h, pad2(hours));
+      bump(el.m, pad2(minutes));
+      bump(el.s, pad2(seconds));
     }
 
-    // Начальный рендер и запуск тикера
     update();
     const timer = setInterval(update, 250);
-  </script>
-</body>
-</html>
-
-    .container {
-      z-index: 1;
-      padding: 20px;
-      max-width: 800px;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(to right, #ffd700, #ffa500);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .timer {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .time-unit {
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 15px;
-      padding: 20px;
-      min-width: 100px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .time-value {
-      font-size: 3rem;
-      font-weight: bold;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    .time-label {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      margin-top: 5px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.8rem;
-      }
-
-      .timer {
-        gap: 10px;
-      }
-
-      .time-unit {
-        min-width: 70px;
-        padding: 15px;
-      }
-
-      .time-value {
-        font-size: 2rem;
-      }
-
-      .time-label {
-        font-size: 0.8rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      .time-unit {
-        min-width: 60px;
-        padding: 10px;
-      }
-
-      .time-value {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>До переворота календаря осталось:</h1>
-    <div class="timer">
-      <div class="time-unit">
-        <div class="time-value" id="days">00</div>
-        <div class="time-label">дней</div>
-      </div>
-      <div class="time-unit">
-        <div class="time-value" id="hours">00</div>
-        <div class="time-label">часов</div>
-      </div>
-      <div class="time-unit">
-        <div class="time-value" id="minutes">00</div>
-        <div class="time-label">минут</div>
-      </div>
-      <div class="time-unit">
-        <div class="time-value" id="seconds">00</div>
-        <div class="time-label">секунд</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Установите дату окончания: 03.09.2025 00:00
-    const targetDate = new Date('September 3, 2025 00:00:00').getTime();
-
-    const updateTimer = () => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        clearInterval(timerInterval);
-        document.querySelector("h1").textContent = "Переворот календаря свершился!";
-        document.querySelector(".timer").innerHTML = "";
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("days").textContent = days.toString().padStart(2, '0');
-      document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-      document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-      document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
-    };
-
-    updateTimer();
-    const timerInterval = setInterval(updateTimer, 1000);
   </script>
 </body>
 </html>
