@@ -1,224 +1,237 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b1220" />
   <title>До переворота календаря осталось…</title>
-
-  <!-- Встроенные стили в <style> (корректное подключение CSS) -->
   <style>
     :root{
-      --bg: radial-gradient(1200px 800px at 80% -10%, #2a74ff22, transparent 60%),
-            radial-gradient(900px 700px at -10% 110%, #ff2ad622, transparent 60%),
-            linear-gradient(180deg, #0b1220, #0b1220);
-      --panel: #0f1726cc;
-      --border: #ffffff1a;
-      --text: #eaf1ff;
-      --muted: #a9b3c7;
-      --glow1: #6aa2ff;
-      --glow2: #ff7ad6;
+      --bg1: #0f172a;
+      --bg2: #1e293b;
+      --accent: #60a5fa;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --card: rgba(255,255,255,0.08);
+      --blur: 14px;
+      --radius: 16px;
     }
-
-    *{ box-sizing: border-box; }
-    html, body{ height: 100%; }
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg1: #f8fafc;
+        --bg2: #e2e8f0;
+        --accent: #2563eb;
+        --text: #0f172a;
+        --muted: #475569;
+        --card: rgba(255,255,255,0.75);
+      }
+    }
+    html, body { height: 100%; }
     body{
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-      color: var(--text);
-      background: var(--bg), #0b1220;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.2), transparent 60%),
+        radial-gradient(1200px 600px at 90% 90%, rgba(56,189,248,0.18), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
       display: grid;
       place-items: center;
-      padding: 24px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-
+    .container{ width: min(100%, 900px); padding: clamp(16px, 3vw, 32px); }
     .card{
-      width: min(920px, 100%);
-      background: color-mix(in oklab, var(--panel) 92%, transparent);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: clamp(16px, 4vw, 28px);
-      backdrop-filter: blur(10px) saturate(1.2);
-      -webkit-backdrop-filter: blur(10px) saturate(1.2);
-      box-shadow: 0 10px 30px #0008, inset 0 -1px 0 #fff1;
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: clamp(16px, 4vw, 40px);
+      box-shadow:
+        0 10px 25px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.08);
     }
-
-    .title{
-      margin: 0 0 clamp(14px, 3.2vw, 22px);
-      font-weight: 800;
+    h1{
+      margin: 0 0 8px;
+      font-size: clamp(20px, 4vw, 40px);
       line-height: 1.2;
-      font-size: clamp(18px, 5vw, 32px);
-      letter-spacing: 0.2px;
-      text-wrap: balance;
-      background: linear-gradient(90deg, var(--text), #cfe1ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      letter-spacing: 0.3px;
     }
-
+    .subtitle{
+      margin: 0 0 clamp(16px, 3vw, 20px);
+      color: var(--muted);
+      font-size: clamp(14px, 2.6vw, 18px);
+    }
     .timer{
       display: grid;
-      grid-template-columns: repeat(4, minmax(110px, 1fr));
-      gap: clamp(10px, 3vw, 18px);
-      align-items: stretch;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(8px, 2vw, 16px);
     }
-    @media (max-width: 560px){
+    @media (max-width: 520px){
       .timer{ grid-template-columns: repeat(2, 1fr); }
     }
-
-    .block{
-      position: relative;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background:
-        radial-gradient(120% 160% at 110% -20%, #6aa2ff16, transparent 60%),
-        radial-gradient(120% 160% at -10% 120%, #ff7ad616, transparent 60%),
-        linear-gradient(180deg, #111925, #0e1624);
-      box-shadow: 0 8px 20px #0007, inset 0 1px 0 #ffffff0a;
-      padding: clamp(10px, 3vw, 16px) clamp(12px, 3.4vw, 18px);
-      display: grid;
-      align-content: center;
-      justify-items: center;
-      min-height: clamp(88px, 26vw, 140px);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .number{
-      font-weight: 900;
-      font-variant-numeric: tabular-nums lining-nums;
-      line-height: 1;
-      letter-spacing: -0.5px;
-      font-size: clamp(34px, 14vw, 80px);
-      background: linear-gradient(180deg, #ffffff, #cfe1ff 60%, #a9b3c7);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 2px 8px #0007);
-      transform-origin: center bottom;
-    }
-
     .unit{
-      margin-top: clamp(4px, 1.2vw, 8px);
-      font-size: clamp(10px, 2.4vw, 14px);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      user-select: none;
-    }
-
-    /* Анимация на смену цифры */
-    @keyframes pop {
-      0%   { transform: scale(0.92); filter: drop-shadow(0 0 0 #0000); }
-      60%  { transform: scale(1.04); filter: drop-shadow(0 6px 16px #0008); }
-      100% { transform: scale(1);    filter: drop-shadow(0 2px 8px #0007); }
-    }
-    .number.tick { animation: pop 380ms cubic-bezier(.2,.8,.2,1); }
-
-    /* Декоративный блик */
-    .block::after{
-      content:"";
-      position: absolute; inset: -40%;
-      background: conic-gradient(from 210deg at 50% 50%, #fff0 0 75%, #ffffff0a 83%, #fff0 90%);
-      animation: sweep 6s linear infinite;
-      z-index: -1;
-    }
-    @keyframes sweep { to { transform: rotate(360deg); } }
-
-    /* Доступность: уважать prefers-reduced-motion */
-    @media (prefers-reduced-motion: reduce){
-      .number.tick { animation-duration: 1ms; animation-iteration-count: 1; }
-      .block::after { animation-duration: 1ms; animation-iteration-count: 1; }
-      * { scroll-behavior: auto !important; }
-    }
-
-    .status{
-      margin-top: clamp(14px, 3.5vw, 20px);
-      color: var(--muted);
-      font-size: clamp(12px, 3.2vw, 14px);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
       text-align: center;
+      padding: clamp(12px, 3vw, 20px);
+    }
+    .value{
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(32px, 12vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .label{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: clamp(12px, 2.5vw, 16px);
+      text-transform: lowercase;
+      letter-spacing: 0.04em;
+    }
+    .status{
+      margin-top: clamp(12px, 2.5vw, 16px);
+      color: var(--muted);
+      font-size: clamp(13px, 2.4vw, 16px);
+    }
+    .hidden{
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .pulse{ animation: pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse{
+      0%   { text-shadow: 0 0 0 rgba(96,165,250,0.0); }
+      50%  { text-shadow: 0 0 16px rgba(96,165,250,0.6); }
+      100% { text-shadow: 0 0 0 rgba(96,165,250,0.0); }
     }
   </style>
 </head>
 <body>
-  <main class="card" aria-live="polite">
-    <h1 class="title">до переворота календаря осталось:…</h1>
+  <main class="container">
+    <section class="card">
+      <h1>До переворота календаря осталось…</h1>
+      <p class="subtitle">Финиш в 00:00 03.09.2025 (локальное время устройства)</p>
 
-    <section class="timer" role="group" aria-label="Таймер обратного отсчёта">
-      <div class="block" aria-label="Дни">
-        <div class="number" id="d">00</div>
-        <div class="unit">дни</div>
+      <div class="timer" role="timer" aria-live="polite" aria-atomic="true">
+        <div class="unit">
+          <div class="value" id="days">00</div>
+          <div class="label">дней</div>
+        </div>
+        <div class="unit">
+          <div class="value" id="hours">00</div>
+          <div class="label">часов</div>
+        </div>
+        <div class="unit">
+          <div class="value" id="minutes">00</div>
+          <div class="label">минут</div>
+        </div>
+        <div class="unit">
+          <div class="value" id="seconds">00</div>
+          <div class="label">секунд</div>
+        </div>
       </div>
-      <div class="block" aria-label="Часы">
-        <div class="number" id="h">00</div>
-        <div class="unit">часы</div>
-      </div>
-      <div class="block" aria-label="Минуты">
-        <div class="number" id="m">00</div>
-        <div class="unit">минуты</div>
-      </div>
-      <div class="block" aria-label="Секунды">
-        <div class="number" id="s">00</div>
-        <div class="unit">секунды</div>
-      </div>
+
+      <p class="status" id="status">Отсчёт идёт…</p>
+      <div class="hidden" aria-live="polite" aria-atomic="true" id="sr-status"></div>
     </section>
-
-    <div class="status" id="status">Цель: 00:00 • 03.09.2025 (локальное время)</div>
   </main>
 
-  <noscript>Для работы таймера нужен JavaScript.</noscript>
-
   <script>
-    // Целевая дата: 00:00 03.09.2025 по локальному времени устройства
-    // Месяцы 0-индексированы: 8 = сентябрь
-    const target = new Date(2025, 8, 3, 0, 0, 0, 0);
+    (function(){
+      'use strict';
 
-    const el = {
-      d: document.getElementById('d'),
-      h: document.getElementById('h'),
-      m: document.getElementById('m'),
-      s: document.getElementById('s'),
-      status: document.getElementById('status'),
-      title: document.querySelector('.title'),
-    };
+      // Конец: 00:00 03.09.2025 (локальное время устройства)
+      // Месяцы: 0=янв ... 8=сентябрь
+      const target = new Date(2025, 8, 3, 0, 0, 0);
 
-    const SEC = 1000, MIN = 60 * SEC, HOUR = 60 * MIN, DAY = 24 * HOUR;
+      const $ = id => document.getElementById(id);
+      const el = {
+        days: $('days'),
+        hours: $('hours'),
+        minutes: $('minutes'),
+        seconds: $('seconds'),
+        status: $('status'),
+        sr: $('sr-status')
+      };
 
-    const pad2 = (n) => String(n).padStart(2, '0');
+      // Русские склонения
+      const labels = {
+        day: ['день','дня','дней'],
+        hour: ['час','часа','часов'],
+        minute: ['минута','минуты','минут'],
+        second: ['секунда','секунды','секунд']
+      };
 
-    function bump(node, value){
-      if (node.textContent === value) return;
-      node.classList.remove('tick');
-      void node.offsetWidth; // перезапустить анимацию
-      node.textContent = value;
-      node.classList.add('tick');
-    }
-
-    function update(){
-      const now = new Date();
-      let diff = target - now;
-
-      if (diff <= 0){
-        ['d','h','m','s'].forEach(k => bump(el[k], '00'));
-        el.title.textContent = 'Календарь перевернулся!';
-        el.status.textContent = 'Событие наступило';
-        clearInterval(timer);
-        return;
+      function plural(n, forms) {
+        const n10 = n % 10, n100 = n % 100;
+        if (n10 === 1 && n100 !== 11) return forms;
+        if (n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return forms[1];
+        return forms[2];
       }
 
-      const days = Math.floor(diff / DAY); diff %= DAY;
-      const hours = Math.floor(diff / HOUR); diff %= HOUR;
-      const minutes = Math.floor(diff / MIN); diff %= MIN;
-      const seconds = Math.floor(diff / SEC);
+      function pad(n){ return String(n).padStart(2, '0'); }
 
-      bump(el.d, String(days).padStart(2, '0'));
-      bump(el.h, pad2(hours));
-      bump(el.m, pad2(minutes));
-      bump(el.s, pad2(seconds));
-    }
+      let lastAnnouncedMinute = null;
 
-    update();
-    const timer = setInterval(update, 250);
+      function update(){
+        const now = new Date();
+        let diff = target - now;
+
+        if (diff <= 0) {
+          el.days.textContent    = '00';
+          el.hours.textContent   = '00';
+          el.minutes.textContent = '00';
+          el.seconds.textContent = '00';
+          el.status.textContent  = 'Календарь перевернулся!';
+          el.status.classList.add('pulse');
+          el.sr.textContent = 'Отсчёт завершён';
+          return true;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days    = Math.floor(totalSeconds / 86400);
+        const hours   = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        el.days.textContent    = pad(days);
+        el.hours.textContent   = pad(hours);
+        el.minutes.textContent = pad(minutes);
+        el.seconds.textContent = pad(seconds);
+
+        el.status.textContent =
+          `${days} ${plural(days, labels.day)} • ${hours} ${plural(hours, labels.hour)} • ${minutes} ${plural(minutes, labels.minute)} • ${seconds} ${plural(seconds, labels.second)}`;
+
+        // Аудио‑доступность: обновление раз в минуту, чтобы не «болтать» каждую секунду
+        if (minutes !== lastAnnouncedMinute) {
+          lastAnnouncedMinute = minutes;
+          el.sr.textContent =
+            `Осталось ${days} ${plural(days, labels.day)}, ${hours} ${plural(hours, labels.hour)} и ${minutes} ${plural(minutes, labels.minute)}`;
+        }
+
+        return false;
+      }
+
+      // Первый рендер
+      update();
+
+      // Интервал 1с + корректировка при возврате на вкладку
+      let timerId = setInterval(update, 1000);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          update();
+          clearInterval(timerId);
+          timerId = setInterval(update, 1000);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
